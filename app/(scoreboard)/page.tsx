@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <main><PageHeading heading="THM Scoreboard"/></main>;
+  return <main><PageHeading heading="THM Leaderboard"/></main>;
 }
