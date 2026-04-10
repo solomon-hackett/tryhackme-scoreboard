@@ -1,7 +1,15 @@
-import { fetchScores } from "@/app/lib/data";
+import { fetchFilteredScores } from "@/app/lib/data";
 
-export default async function Leaderboard() {
-  const people = await fetchScores();
+export default async function Leaderboard({
+  query,
+  sort,
+  currentPage,
+}: {
+  query: string;
+  sort: string;
+  currentPage: number;
+}) {
+  const people = await fetchFilteredScores(query, sort, currentPage);
 
   return (
     <div className="rounded-2xl overflow-hidden liquid-glass">

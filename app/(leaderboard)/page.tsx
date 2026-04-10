@@ -4,24 +4,38 @@ import Leaderboard from "@/app/ui/home/leaderboard";
 import { LeaderboardSkeleton } from "@/app/ui/skeletons";
 import { Suspense } from "react";
 import Pagination from "@/app/ui/pagination";
-import Search from "../ui/search";
+import Search from "@/app/ui/search";
+import { fetchPeoplePages } from "@/app/lib/data";
+import Sort from "@/app/ui/home/sort";
 
 export const metadata: Metadata = {
   title: "Scores",
 };
 
-export default function Page() {
+export default async function Page(props: {
+  searchParams?: Promise<{
+    query?: string;
+    sort?: string;
+    page?: string;
+  }>;
+}) {
+  const searchParams = await props.searchParams;
+  const query = searchParams?.query || "";
+  const sort = searchParams?.sort || "";
+  const currentPage = Number(searchParams?.page) || 1;
+  const totalPages = await fetchPeoplePages(query);
+
   return (
     <main className="flex flex-col items-center px-5 pt-20 w-screen">
       <PageHeading heading="THM Leaderboard" />
       <div>
-        <Search />
-        <
+        <Search placeholder="Search People..." />
+        <Sort />
       </div>
-      <Suspense fallback={<LeaderboardSkeleton />}>
-        <Leaderboard />
+      <Suspense key={query + currentPage} fallback={<LeaderboardSkeleton />}>
+        <Leaderboard query={query} sort={sort} currentPage={currentPage} />
       </Suspense>
-      <Pagination />
+      <Pagination totalPages={totalPages} />
     </main>
   );
 }
