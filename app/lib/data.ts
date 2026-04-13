@@ -18,35 +18,54 @@ export async function fetchFilteredScores(
   currentPage: number,
 ) {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-
   const { column, direction } =
     ALLOWED_SORTS[sort] ?? ALLOWED_SORTS["score-desc"];
 
   const data = await sql<Person[]>`
-  SELECT * FROM people
-  WHERE people.name ILIKE ${"%" + query + "%"}
-     OR people.score::text ILIKE ${"%" + query + "%"}
+  SELECT * FROM (
+    SELECT *,
+      RANK() OVER (ORDER BY score::numeric DESC) AS position
+    FROM people
+  ) ranked
+  WHERE name ILIKE ${"%" + query + "%"}
+     OR score::text ILIKE ${"%" + query + "%"}
   ORDER BY ${
-    column === "score" ? sql`score::numeric` : sql.unsafe(`"${column}"`)
+    column === "score" ? sql`score::numeric` : sql.unsafe(`LOWER("${column}")`)
   } ${sql.unsafe(direction)}
   LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
-  `;
+`;
 
   return data;
 }
 
 export async function fetchPeoplePages(query: string) {
   try {
-    const data = await sql`SELECT COUNT(*)
-    FROM people
-    WHERE people.name ILIKE ${"%" + query + "%"}
-     OR people.score::text ILIKE ${"%" + query + "%"} 
-  `;
-
-    const totalPages = Math.ceil(Number(data[0].count) / ITEMS_PER_PAGE);
-    return totalPages;
+    const data = await sql`
+      SELECT COUNT(*)
+      FROM people
+      WHERE name ILIKE ${"%" + query + "%"}
+         OR score::text ILIKE ${"%" + query + "%"}
+    `;
+    return Math.ceil(Number(data[0].count) / ITEMS_PER_PAGE);
   } catch (error) {
     console.error("Database Error:", error);
-    throw new Error("Failed to fetch total number of invoices.");
+    throw new Error("Failed to fetch total number of people.");
   }
+}
+
+export async function fetchFilteredScoresForEdit(
+  query: string,
+  currentPage: number,
+) {
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  const data = await sql<Person[]>`
+  SELECT * FROM (
+    SELECT *
+    FROM people
+  ) ranked
+  WHERE name ILIKE ${"%" + query + "%"}
+     OR score::text ILIKE ${"%" + query + "%"}
+  LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+`;
+  return data;
 }

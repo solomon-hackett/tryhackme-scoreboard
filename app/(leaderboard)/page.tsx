@@ -28,11 +28,14 @@ export default async function Page(props: {
   return (
     <main className="flex flex-col items-center px-5 pt-20 w-screen">
       <PageHeading heading="THM Leaderboard" />
-      <div>
+      <div className="z-50 relative flex gap-5 mb-5">
         <Search placeholder="Search People..." />
         <Sort />
       </div>
-      <Suspense key={query + currentPage} fallback={<LeaderboardSkeleton />}>
+      <Suspense
+        key={query + sort + currentPage}
+        fallback={<LeaderboardSkeleton />}
+      >
         <Leaderboard query={query} sort={sort} currentPage={currentPage} />
       </Suspense>
       <Pagination totalPages={totalPages} />

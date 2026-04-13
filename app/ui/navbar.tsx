@@ -39,7 +39,7 @@ export default function NavBar() {
   }, [activeHref]);
 
   return (
-    <nav className="top-3 right-4 left-4 z-10 fixed flex justify-between items-center px-5 rounded-full h-20 liquid-glass">
+    <nav className="top-3 right-4 left-4 z-10 fixed flex justify-between items-center backdrop-blur-md px-5 rounded-full h-20 liquid-glass">
       <Image
         src="/logo.png"
         width={1047}
