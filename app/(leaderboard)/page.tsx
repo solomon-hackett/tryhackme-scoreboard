@@ -28,7 +28,7 @@ export default async function Page(props: {
   return (
     <main className="flex flex-col items-center px-5 pt-20 w-screen">
       <PageHeading heading="THM Leaderboard" />
-      <div className="z-50 relative flex gap-5 mb-5">
+      <div className="relative flex gap-5 mb-5">
         <Search placeholder="Search People..." />
         <Sort />
       </div>

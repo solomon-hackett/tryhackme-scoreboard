@@ -1,4 +1,5 @@
 import { fetchFilteredScores } from "@/app/lib/data";
+import Link from "next/link";
 
 export default async function Leaderboard({
   query,
@@ -27,7 +28,14 @@ export default async function Leaderboard({
               <td className="px-5 py-2 text-xl text-center">
                 {person.position}
               </td>
-              <td className="px-5 py-2 text-xl text-center">{person.name}</td>
+              <td className="px-5 py-2 text-xl text-center">
+                <Link
+                  href={person.link}
+                  className="after:bottom-0 after:left-1/2 hover:after:left-0 after:absolute relative after:bg-current after:w-0 hover:after:w-full after:h-0.5 after:transition-all after:duration-300"
+                >
+                  {person.name}
+                </Link>
+              </td>
               <td className="px-5 py-2 text-xl text-center">{person.score}</td>
             </tr>
           ))}

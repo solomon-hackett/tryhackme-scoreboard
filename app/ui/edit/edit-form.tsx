@@ -1,20 +1,27 @@
-"use client";
+import { fetchPersonById } from "@/app/lib/data";
+import { updatePerson } from "@/app/lib/actions";
 
-import { addPerson } from "@/app/lib/actions";
-
-export default function AddForm() {
+export default async function EditForm({ id }: { id: string }) {
+  const person = await fetchPersonById(id);
   return (
     <form
-      action={addPerson}
+      action={updatePerson}
       className="flex flex-col gap-5 px-10 py-5 rounded-2xl liquid-glass"
     >
+      <input
+        type="hidden"
+        name="id"
+        value={id}
+        className="px-2 py-1 focus:border focus:border-green-300 border-none rounded-xl outline-none text-xl liquid-glass"
+        required
+      />
       <label htmlFor="name" className="px-2 py-1 text-3xl text-center">
         Name
       </label>
       <input
         type="text"
-        id="name"
         name="name"
+        defaultValue={person.name}
         className="px-2 py-1 focus:border focus:border-green-300 border-none rounded-xl outline-none text-xl liquid-glass"
         required
       />
@@ -23,8 +30,8 @@ export default function AddForm() {
       </label>
       <input
         type="number"
-        id="score"
         name="score"
+        defaultValue={person.score}
         className="px-2 py-1 focus:border focus:border-green-300 border-none rounded-xl outline-none text-xl liquid-glass"
         required
       />
@@ -33,8 +40,8 @@ export default function AddForm() {
       </label>
       <input
         type="url"
-        id="link"
         name="link"
+        defaultValue={person.link}
         className="px-2 py-1 focus:border focus:border-green-300 border-none rounded-xl outline-none text-xl liquid-glass"
         required
       />
@@ -42,7 +49,7 @@ export default function AddForm() {
         type="submit"
         className="px-2 py-1 rounded-xl text-2xl cursor-pointer liquid-glass"
       >
-        Add Person
+        Update
       </button>
     </form>
   );

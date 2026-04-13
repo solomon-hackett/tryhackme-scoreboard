@@ -22,9 +22,10 @@ export default function NavBar() {
   const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
 
   const activeHref =
-    hovered ?? links.find((l) => l.href === pathname)?.href ?? links[0].href;
+    hovered ?? links.find((l) => l.href === pathname)?.href ?? null;
 
   useEffect(() => {
+    if (!activeHref) return;
     const el = linkRefs.current.get(activeHref);
     const container = navRef.current;
     if (!el || !container) return;
@@ -53,10 +54,12 @@ export default function NavBar() {
         aria-label="Navigation links"
         className="relative flex gap-1 p-2 rounded-full liquid-glass"
       >
-        <div
-          className="top-2 bottom-2 absolute bg-green-400/15 border border-green-400/25 rounded-full transition-all duration-300 ease-in-out pointer-events-none"
-          style={indicatorStyle}
-        />
+        {activeHref && (
+          <div
+            className="top-2 bottom-2 absolute bg-green-400/15 border border-green-400/25 rounded-full transition-all duration-300 ease-in-out pointer-events-none"
+            style={indicatorStyle}
+          />
+        )}
 
         {links.map((link) => (
           <Link

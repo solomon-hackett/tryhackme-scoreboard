@@ -69,3 +69,15 @@ export async function fetchFilteredScoresForEdit(
 `;
   return data;
 }
+
+export async function fetchPersonById(id: string) {
+  try {
+    const data = await sql<Person[]>`
+    SELECT * FROM people WHERE id = ${id}
+  `;
+    return data[0];
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch person.");
+  }
+}

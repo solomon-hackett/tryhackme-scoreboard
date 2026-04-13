@@ -53,7 +53,7 @@ export default function Sort() {
     : "Sort by";
 
   return (
-    <div ref={ref} className="z-50 relative">
+    <div ref={ref} className="z-1 relative">
       <button
         onClick={() => setOpen((prev) => !prev)}
         aria-haspopup="listbox"

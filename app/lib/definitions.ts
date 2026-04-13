@@ -5,3 +5,9 @@ export type Person = {
   score: string;
   link: string;
 };
+
+export type User = {
+  id: string;
+  username: string;
+  password: string;
+};
